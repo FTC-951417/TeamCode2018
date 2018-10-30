@@ -66,10 +66,6 @@ public class DriveForward extends LinearOpMode {
     private DcMotor roller = null;
     private Servo pusher = null;
 
-    final  double pusher_home = 0.0;//Servo starting position
-    final  double pusher_min_range = - 0.5;
-    final  double pusher_max_range = 0.5;
-
     @Override
      public void runOpMode() {
         telemetry.addData("Status", "Initialized");
@@ -160,42 +156,24 @@ public class DriveForward extends LinearOpMode {
                 roller.setPower(0.0);
 
             }
-                double   pusher = pusher_home;
+            // pusher
+                double   pusher_position = 0.0;
 
                final double pusher_speed = 0.01;
 
-               if (gamepad2.right_bumper)
-               pusher += pusher_speed;
+               if (gamepad2.right_bumper) {
+                   pusher_position += pusher_speed;
+               }
+               else if (gamepad2.left_bumper) {
+                   pusher_position -= pusher_speed;
+               }
 
-               else if (gamepad2.left_bumper)
-                   pusher -= pusher_speed;
-            pusher = Range.clip(pusherposition, pusher_min_range, pusher_max_range  );
-            pusher.setPosition(pusherposition);
-               // run until the end of the match (driver presses STOP)
-            double tgtPower = 0;
-            {
-                tgtPower = -this.gamepad1.left_stick_y;
-                // check to see if we need to move the servo.
-                if (gamepad1.y) {
-                    // move to 0 degrees.
-                    pusher.setPosition(0);
-                } else if (gamepad1.x || gamepad1.b) {
-                    // move to 90 degrees.
-                    pusher.setPosition(0.5);
-                } else if (gamepad1.a) {
-                    // move to 180 degrees.
-                    pusher.setPosition(1);
-                }
-                telemetry.addData("Servo Position", pusher.getPosition());
-                telemetry.addData("Target Power", tgtPower);
-                telemetry.addData("Status", "Running");
-                telemetry.update();
                 // Show the elapsed game time and wheel power.
                 telemetry.addData("Status", "Run Time: " + runtime.toString());
                 telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
-                telemetry.addData("pusher", "%2f", pusherposition);
+                telemetry.addData("pusher", "%2f", pusher_position);
                 telemetry.update();
             }
         }
      }
-}
+
