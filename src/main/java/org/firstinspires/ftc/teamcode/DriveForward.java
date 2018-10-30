@@ -84,6 +84,7 @@ public class DriveForward extends LinearOpMode {
         joint1 = hardwareMap.get(DcMotor.class, "joint_1");
         joint2 = hardwareMap.get (DcMotor.class, "joint_2");
         roller = hardwareMap.get (DcMotor.class, "roller");
+        pusher = hardwareMap.get (Servo.class, "pusher");
         pusher.setDirection(Servo.Direction.FORWARD);
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
