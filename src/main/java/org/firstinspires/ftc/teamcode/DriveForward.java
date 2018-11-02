@@ -76,6 +76,8 @@ public class DriveForward extends LinearOpMode {
         // step (using the FTC Robot Controller app on the phone).
         leftDrive  = hardwareMap.get(DcMotor.class, "left_motor");
         rightDrive = hardwareMap.get(DcMotor.class, "right_motor");
+        leftDrive.setDirection(DcMotor.Direction.REVERSE);
+        rightDrive.setDirection(DcMotor.Direction.REVERSE);
 
         joint1 = hardwareMap.get(DcMotor.class, "joint_1");
         joint2 = hardwareMap.get (DcMotor.class, "joint_2");
