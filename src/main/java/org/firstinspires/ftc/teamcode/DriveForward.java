@@ -60,10 +60,14 @@ public class DriveForward extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
+    private DcMotor leftFDrive = null;
+    private DcMotor rightFDrive = null;
 
+    public DcMotor lift = null;
     private DcMotor joint1 = null;
     private DcMotor joint2 = null;
     private DcMotor roller = null;
+
     private Servo pusher = null;
 
     @Override
@@ -76,12 +80,21 @@ public class DriveForward extends LinearOpMode {
         // step (using the FTC Robot Controller app on the phone).
         leftDrive  = hardwareMap.get(DcMotor.class, "left_motor");
         rightDrive = hardwareMap.get(DcMotor.class, "right_motor");
+        leftFDrive = hardwareMap.get(DcMotor.class, "left_front_motor");
+        rightFDrive = hardwareMap.get(DcMotor.class,"right_front_motor");
+        leftDrive.setDirection(DcMotor.Direction.REVERSE);
+        rightDrive.setDirection(DcMotor.Direction.REVERSE);
+        leftFDrive.setDirection(DcMotor.Direction.REVERSE);
+        rightFDrive.setDirection(DcMotor.Direction.FORWARD);
 
+        lift = hardwareMap.get(DcMotor.class, "lift");
         joint1 = hardwareMap.get(DcMotor.class, "joint_1");
         joint2 = hardwareMap.get (DcMotor.class, "joint_2");
         roller = hardwareMap.get (DcMotor.class, "roller");
         pusher = hardwareMap.get (Servo.class, "pusher");
         pusher.setDirection(Servo.Direction.FORWARD);
+        pusher.setPosition(0.2);
+
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
@@ -111,7 +124,27 @@ public class DriveForward extends LinearOpMode {
             // Send calculated power to wheels
             leftDrive.setPower(leftPower);
             rightDrive.setPower(rightPower);
+            leftFDrive.setPower(leftPower);
+            rightFDrive.setPower(rightPower);
 
+            //controls lift
+            double liftUp = gamepad1.right_trigger;
+            double liftDown = gamepad1.left_trigger;
+            //if right trigger is pressed down enough. dominates over roll out
+            if (liftUp > 0.5) {
+
+                lift.setPower(0.4);
+
+                //if left trigger is pressed enough
+            } else if (liftDown > 0.5) {
+
+                lift.setPower(-.4);
+
+            } else {
+
+                lift.setPower(0.0);
+
+            }
             //control joint1
             double joint1Power = -gamepad2.left_stick_y;
             if (joint1Power > .75 || joint1Power < -.75) {
@@ -157,23 +190,24 @@ public class DriveForward extends LinearOpMode {
 
             }
             // pusher
-                double   pusher_position = 0.0;
 
-               final double pusher_speed = 0.01;
-
-               if (gamepad2.right_bumper) {
-                   pusher_position += pusher_speed;
-               }
-               else if (gamepad2.left_bumper) {
-                   pusher_position -= pusher_speed;
-               }
+            // check to see if we need to move the servo.
+            if(gamepad2.b) {
+                // move to 0 degrees.
+                pusher.setPosition(0);
+            } else if (gamepad2.a) {
+                // move to 90 degrees.
+                pusher.setPosition(0.5);
+            } else if (gamepad2.y) {
+                // move to 180 degrees.
+                pusher.setPosition(1);
+            }
 
                 // Show the elapsed game time and wheel power.
                 telemetry.addData("Status", "Run Time: " + runtime.toString());
                 telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
-                telemetry.addData("pusher", "%2f", pusher_position);
+                telemetry.addData("pusher Position", pusher.getPosition());
                 telemetry.update();
             }
         }
      }
-
