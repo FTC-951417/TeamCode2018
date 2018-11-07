@@ -80,20 +80,16 @@ public class DriveForward extends LinearOpMode {
         // step (using the FTC Robot Controller app on the phone).
         leftDrive  = hardwareMap.get(DcMotor.class, "left_motor");
         rightDrive = hardwareMap.get(DcMotor.class, "right_motor");
-<<<<<<< HEAD
         leftFDrive = hardwareMap.get(DcMotor.class, "left_front_motor");
         rightFDrive = hardwareMap.get(DcMotor.class,"right_front_motor");
+
         leftDrive.setDirection(DcMotor.Direction.REVERSE);
         rightDrive.setDirection(DcMotor.Direction.REVERSE);
         leftFDrive.setDirection(DcMotor.Direction.REVERSE);
-        rightFDrive.setDirection(DcMotor.Direction.FORWARD);
+        rightFDrive.setDirection(DcMotor.Direction.REVERSE);
 
         lift = hardwareMap.get(DcMotor.class, "lift");
-=======
-        leftDrive.setDirection(DcMotor.Direction.REVERSE);
-        rightDrive.setDirection(DcMotor.Direction.REVERSE);
 
->>>>>>> 01de958f01c801a3079f53210525b6189dac206c
         joint1 = hardwareMap.get(DcMotor.class, "joint_1");
         joint2 = hardwareMap.get (DcMotor.class, "joint_2");
         roller = hardwareMap.get (DcMotor.class, "roller");
@@ -165,7 +161,7 @@ public class DriveForward extends LinearOpMode {
             }
 
             //control joint2
-            double joint2Power = -gamepad2.right_stick_y;
+            double joint2Power = -gamepad2.right_stick_y / 3;
             if (joint2Power > 0.8 || joint2Power < -0.8) {
 
                 //the constant number sets the max power
