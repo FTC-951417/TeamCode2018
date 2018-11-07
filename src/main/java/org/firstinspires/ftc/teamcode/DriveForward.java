@@ -70,6 +70,8 @@ public class DriveForward extends LinearOpMode {
 
     private Servo pusher = null;
 
+    private int orgCounts = 0;
+
     @Override
      public void runOpMode() {
         telemetry.addData("Status", "Initialized");
@@ -84,18 +86,21 @@ public class DriveForward extends LinearOpMode {
         rightFDrive = hardwareMap.get(DcMotor.class,"right_front_motor");
 
         leftDrive.setDirection(DcMotor.Direction.REVERSE);
-        rightDrive.setDirection(DcMotor.Direction.REVERSE);
+        rightDrive.setDirection(DcMotor.Direction.FORWARD);
         leftFDrive.setDirection(DcMotor.Direction.REVERSE);
-        rightFDrive.setDirection(DcMotor.Direction.REVERSE);
+        rightFDrive.setDirection(DcMotor.Direction.FORWARD);
 
         lift = hardwareMap.get(DcMotor.class, "lift");
 
         joint1 = hardwareMap.get(DcMotor.class, "joint_1");
+        joint1.setDirection(DcMotor.Direction.REVERSE);
         joint2 = hardwareMap.get (DcMotor.class, "joint_2");
         roller = hardwareMap.get (DcMotor.class, "roller");
         pusher = hardwareMap.get (Servo.class, "pusher");
         pusher.setDirection(Servo.Direction.FORWARD);
         pusher.setPosition(0.2);
+
+        orgCounts = leftDrive.getCurrentPosition();
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -114,7 +119,7 @@ public class DriveForward extends LinearOpMode {
             // POV Mode uses left stick to go forward, and right stick to turn.
             // - This uses basic math to combine motions and is easier to drive straight.
             double drive = -gamepad1.left_stick_y;
-            double turn = gamepad1.right_stick_x;
+            double turn = gamepad1.left_stick_x;
             leftPower = Range.clip(drive + turn, -1.0, 1.0);
             rightPower = Range.clip(drive - turn, -1.0, 1.0);
 
@@ -161,7 +166,7 @@ public class DriveForward extends LinearOpMode {
             }
 
             //control joint2
-            double joint2Power = -gamepad2.right_stick_y / 3;
+            double joint2Power = -gamepad2.right_stick_y * .95;
             if (joint2Power > 0.8 || joint2Power < -0.8) {
 
                 //the constant number sets the max power
@@ -209,6 +214,7 @@ public class DriveForward extends LinearOpMode {
                 telemetry.addData("Status", "Run Time: " + runtime.toString());
                 telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
                 telemetry.addData("pusher Position", pusher.getPosition());
+                telemetry.addData("Velocity", (((leftDrive.getCurrentPosition() - orgCounts) / 2240) * 3.91304 * Math.PI) / runtime.seconds());
                 telemetry.update();
             }
         }
