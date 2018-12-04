@@ -40,6 +40,10 @@
         "source": "C:\\Users\\team10058\\.gradle\\caches\\transforms-1\\files-1.1\\FtcCommon-release.aar\\fbd5b5c96eaeb12af253ef62a4c8b438\\res\\xml\\k9usbbot.xml"
     },
     {
+        "merged": "C:\\Users\\team10058\\Desktop\\TeamCode2018\\TeamCode\\build\\intermediates\\res\\merged\\debug\\raw_righttrajectorystep2traj1.csv.flat",
+        "source": "C:\\Users\\team10058\\Desktop\\TeamCode2018\\TeamCode\\src\\main\\res\\raw\\righttrajectorystep2traj1.csv"
+    },
+    {
         "merged": "C:\\Users\\team10058\\Desktop\\TeamCode2018\\TeamCode\\build\\intermediates\\res\\merged\\debug\\layout_loading_indicator_overlay.xml.flat",
         "source": "C:\\Users\\team10058\\.gradle\\caches\\transforms-1\\files-1.1\\RobotCore-release.aar\\0478441c8075f43387b13130aa4db7c6\\res\\layout\\loading_indicator_overlay.xml"
     },
@@ -96,12 +100,16 @@
         "source": "C:\\Users\\team10058\\.gradle\\caches\\transforms-1\\files-1.1\\FtcCommon-release.aar\\fbd5b5c96eaeb12af253ef62a4c8b438\\res\\xml\\pushbot.xml"
     },
     {
-        "merged": "C:\\Users\\team10058\\Desktop\\TeamCode2018\\TeamCode\\build\\intermediates\\res\\merged\\debug\\layout_matrix_devices.xml.flat",
-        "source": "C:\\Users\\team10058\\.gradle\\caches\\transforms-1\\files-1.1\\FtcCommon-release.aar\\fbd5b5c96eaeb12af253ef62a4c8b438\\res\\layout\\matrix_devices.xml"
+        "merged": "C:\\Users\\team10058\\Desktop\\TeamCode2018\\TeamCode\\build\\intermediates\\res\\merged\\debug\\raw_lefttrajectorystep1traj2.csv.flat",
+        "source": "C:\\Users\\team10058\\Desktop\\TeamCode2018\\TeamCode\\src\\main\\res\\raw\\lefttrajectorystep1traj2.csv"
     },
     {
         "merged": "C:\\Users\\team10058\\Desktop\\TeamCode2018\\TeamCode\\build\\intermediates\\res\\merged\\debug\\layout_servo_list.xml.flat",
         "source": "C:\\Users\\team10058\\.gradle\\caches\\transforms-1\\files-1.1\\FtcCommon-release.aar\\fbd5b5c96eaeb12af253ef62a4c8b438\\res\\layout\\servo_list.xml"
+    },
+    {
+        "merged": "C:\\Users\\team10058\\Desktop\\TeamCode2018\\TeamCode\\build\\intermediates\\res\\merged\\debug\\layout_matrix_devices.xml.flat",
+        "source": "C:\\Users\\team10058\\.gradle\\caches\\transforms-1\\files-1.1\\FtcCommon-release.aar\\fbd5b5c96eaeb12af253ef62a4c8b438\\res\\layout\\matrix_devices.xml"
     },
     {
         "merged": "C:\\Users\\team10058\\Desktop\\TeamCode2018\\TeamCode\\build\\intermediates\\res\\merged\\debug\\layout_activity_ftc_lynx_address_update.xml.flat",
@@ -124,12 +132,12 @@
         "source": "C:\\Users\\team10058\\Desktop\\TeamCode2018\\FtcRobotController\\build\\intermediates\\packaged_res\\debug\\drawable-mdpi-v4\\ic_launcher.png"
     },
     {
-        "merged": "C:\\Users\\team10058\\Desktop\\TeamCode2018\\TeamCode\\build\\intermediates\\res\\merged\\debug\\layout_color_list_preference_line_item.xml.flat",
-        "source": "C:\\Users\\team10058\\.gradle\\caches\\transforms-1\\files-1.1\\RobotCore-release.aar\\0478441c8075f43387b13130aa4db7c6\\res\\layout\\color_list_preference_line_item.xml"
-    },
-    {
         "merged": "C:\\Users\\team10058\\Desktop\\TeamCode2018\\TeamCode\\build\\intermediates\\res\\merged\\debug\\layout_activity_ftc_controller.xml.flat",
         "source": "C:\\Users\\team10058\\Desktop\\TeamCode2018\\FtcRobotController\\build\\intermediates\\packaged_res\\debug\\layout\\activity_ftc_controller.xml"
+    },
+    {
+        "merged": "C:\\Users\\team10058\\Desktop\\TeamCode2018\\TeamCode\\build\\intermediates\\res\\merged\\debug\\layout_color_list_preference_line_item.xml.flat",
+        "source": "C:\\Users\\team10058\\.gradle\\caches\\transforms-1\\files-1.1\\RobotCore-release.aar\\0478441c8075f43387b13130aa4db7c6\\res\\layout\\color_list_preference_line_item.xml"
     },
     {
         "merged": "C:\\Users\\team10058\\Desktop\\TeamCode2018\\TeamCode\\build\\intermediates\\res\\merged\\debug\\layout_fragment_wifi_mute.xml.flat",
@@ -268,6 +276,10 @@
         "source": "C:\\Users\\team10058\\.gradle\\caches\\transforms-1\\files-1.1\\RobotCore-release.aar\\0478441c8075f43387b13130aa4db7c6\\res\\layout\\feedback.xml"
     },
     {
+        "merged": "C:\\Users\\team10058\\Desktop\\TeamCode2018\\TeamCode\\build\\intermediates\\res\\merged\\debug\\raw_righttrajectorystep1traj2.csv.flat",
+        "source": "C:\\Users\\team10058\\Desktop\\TeamCode2018\\TeamCode\\src\\main\\res\\raw\\righttrajectorystep1traj2.csv"
+    },
+    {
         "merged": "C:\\Users\\team10058\\Desktop\\TeamCode2018\\TeamCode\\build\\intermediates\\res\\merged\\debug\\layout_analog_outputs.xml.flat",
         "source": "C:\\Users\\team10058\\.gradle\\caches\\transforms-1\\files-1.1\\FtcCommon-release.aar\\fbd5b5c96eaeb12af253ef62a4c8b438\\res\\layout\\analog_outputs.xml"
     },
@@ -338,6 +350,10 @@
     {
         "merged": "C:\\Users\\team10058\\Desktop\\TeamCode2018\\TeamCode\\build\\intermediates\\res\\merged\\debug\\raw_cube_mesh_vertex_shader.glsl.flat",
         "source": "C:\\Users\\team10058\\.gradle\\caches\\transforms-1\\files-1.1\\RobotCore-release.aar\\0478441c8075f43387b13130aa4db7c6\\res\\raw\\cube_mesh_vertex_shader.glsl"
+    },
+    {
+        "merged": "C:\\Users\\team10058\\Desktop\\TeamCode2018\\TeamCode\\build\\intermediates\\res\\merged\\debug\\raw_lefttrajectorystep2traj1.csv.flat",
+        "source": "C:\\Users\\team10058\\Desktop\\TeamCode2018\\TeamCode\\src\\main\\res\\raw\\lefttrajectorystep2traj1.csv"
     },
     {
         "merged": "C:\\Users\\team10058\\Desktop\\TeamCode2018\\TeamCode\\build\\intermediates\\res\\merged\\debug\\layout_servo_controller_banner.xml.flat",

@@ -29,15 +29,11 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import android.content.Context;
-
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 
 
 /**
@@ -53,71 +49,78 @@ import com.qualcomm.robotcore.util.Range;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="New Pathfinder", group="Linear Opmode")
+@Autonomous(name="Just Land Autonomous", group="Linear Opmode")
 //@Disabled
-public class PathfinderNew extends LinearOpMode {
+public class FTCAutonomousLand extends LinearOpMode {
 
+    // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor leftDrive = null;
-    private DcMotor rightDrive = null;
-    private EncoderFollower leftEncoderFollower;
-    private EncoderFollower rightEncoderFollower;
 
-    private int loops = 0;
-    private double prevRuntime = 0;
+    private DcMotor lift = null;
 
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
-        Context context = hardwareMap.appContext;
+        telemetry.update();
 
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
-        leftDrive  = hardwareMap.get(DcMotor.class, "left_motor");
-        rightDrive = hardwareMap.get(DcMotor.class, "right_motor");
+
+        lift = hardwareMap.get(DcMotor.class, "lift");
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
-        leftDrive.setDirection(DcMotor.Direction.REVERSE);
-        rightDrive.setDirection(DcMotor.Direction.FORWARD);
-        rightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        leftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        telemetry.addData("Hello Test", "This should work");
-        Reader reader = new Reader();
-        Segment[] leftSide = reader.getSegments(R.raw.lefttrajectorystep1traj1, telemetry, context);
-        Segment[] rightSide = reader.getSegments(R.raw.righttrajectorystep1traj1, telemetry, context);
-        leftEncoderFollower = new EncoderFollower(leftSide);
-        rightEncoderFollower = new EncoderFollower(rightSide);
-        leftEncoderFollower.configureEncoder(leftDrive.getCurrentPosition(), 2240, 8);
-        leftEncoderFollower.configurePIDVA(1,0.0,0.0,1 / 15 ,0.0);
-        rightEncoderFollower.configureEncoder(rightDrive.getCurrentPosition(), 2240, 8);
-        rightEncoderFollower.configurePIDVA(1,0.0,0.0,1 / 15 ,0.0);
+        //Motors might need to be put in brake mode set that here
 
-        // Tell the driver that initialization is complete.
-        telemetry.addData("Status", "Initialized");
-        telemetry.update();
+        lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
+        int part = 1;
+        int originalLiftPosition = 0;
+        double startRuntime = 0;
+
+        PathfinderDrive pathfinderDrive = null;
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
-            if(runtime.milliseconds() - loops * 20 > 20) {
+            // Setup a variable for each drive wheel to save power level for telemetry
+            double leftPower;
+            double rightPower;
 
-                leftDrive.setPower(leftEncoderFollower.calculate(leftDrive.getCurrentPosition()));
-                rightDrive.setPower(rightEncoderFollower.calculate(rightDrive.getCurrentPosition()));
-                loops++;
+            switch(part){
 
-                telemetry.addData("Loop speed = ", runtime.milliseconds() - prevRuntime);
-                prevRuntime = runtime.milliseconds();
-                telemetry.update();
+                //read original lift encoder position
+                case 1:
+                    originalLiftPosition = lift.getCurrentPosition();
+                    part = 10;
+                    break;
+
+                //move the lift and in the process lower the robot to the ground
+                case 10:
+
+                    lift.setPower(.5);
+                    if(((lift.getCurrentPosition() - originalLiftPosition) / 1013) >= 6.5){
+                        lift.setPower(0);
+                        part = 60;
+                    }
+                    break;
+
+                case 60:
+
+                    break;
 
             }
 
+
+
+            // Show the elapsed game time
+            telemetry.addData("Status", "Run Time: " + runtime.toString());
+            telemetry.update();
         }
     }
 }

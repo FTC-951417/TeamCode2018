@@ -29,14 +29,11 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 
 
 /**
@@ -52,19 +49,20 @@ import com.qualcomm.robotcore.util.Range;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Basic: Linear OpMode", group="Linear Opmode")
+@Autonomous(name="Gold Material Side Autonomous", group="Linear Opmode")
 //@Disabled
-public class BasicLinearOpMode extends LinearOpMode {
+public class FTCAutonomousGold extends LinearOpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
+
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
 
-    private DcMotor joint1 = null;
-    private DcMotor joint2 = null;
-    private DcMotor roller = null;
-    private Servo pusher = null;
+    private DcMotor lift = null;
+
+    private Servo deployer = null;
+
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
@@ -73,30 +71,35 @@ public class BasicLinearOpMode extends LinearOpMode {
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
-        leftDrive  = hardwareMap.get(DcMotor.class, "left_drive");
-        rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
-        joint1 = hardwareMap.get(DcMotor.class, "joint_1");
-        joint2 = hardwareMap.get (DcMotor.class, "joint_2");
-        roller = hardwareMap.get (DcMotor.class, "roller");
-        pusher = hardwareMap.servo.get ("roller");
-        final double pusher_home;//Servo starting position
-        pusher_home = 0.0;
-        final double pusher_min_range = 0.0;
-        final double pusher_max_range = 0.5;
-        pusher.setPosition(pusher_home);
+        leftDrive  = hardwareMap.get(DcMotor.class, "left_motor");
+        rightDrive = hardwareMap.get(DcMotor.class, "right_motor");
+
+        lift = hardwareMap.get(DcMotor.class, "lift");
+
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
-        leftDrive.setDirection(DcMotor.Direction.FORWARD);
+        leftDrive.setDirection(DcMotor.Direction.REVERSE);
         rightDrive.setDirection(DcMotor.Direction.FORWARD);
 
-        joint1.setDirection(DcMotor.Direction.REVERSE);
-        joint2.setDirection(DcMotor.Direction.FORWARD);
-        roller.setDirection(DcMotor.Direction.REVERSE);
+        //Motors might need to be put in brake mode set that here
+        leftDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        pusher.setDirection(Servo.Direction.FORWARD);
-        // Wait for the game to start (driver presses PLAY)0
+        lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        //instatiate servo(s)
+        deployer = hardwareMap.get(Servo.class, "deployer");
+        deployer.setDirection(Servo.Direction.FORWARD);
+        deployer.setPosition(1);
+
+        // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
+        int part = 1;
+        int originalLiftPosition = 0;
+        double startRuntime = 0;
+
+        PathfinderDrive pathfinderDrive = null;
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
@@ -105,28 +108,84 @@ public class BasicLinearOpMode extends LinearOpMode {
             double leftPower;
             double rightPower;
 
-            // Choose to drive using either Tank Mode, or POV Mode
-            // Comment out the method that's not used.  The default below is POV.
+            switch(part){
 
-            // POV Mode uses left stick to go forward, and right stick to turn.
-            // - This uses basic math to combine motions and is easier to drive straight.
-            double drive = -gamepad1.left_stick_y;
-            double turn  =  gamepad1.right_stick_x;
-            leftPower    = Range.clip(drive + turn, -1.0, 1.0) ;
-            rightPower   = Range.clip(drive - turn, -1.0, 1.0) ;
+                //read original lift encoder position
+                case 1:
+                    originalLiftPosition = lift.getCurrentPosition();
+                    part = 10;
+                    break;
 
-            // Tank Mode uses one stick to control each wheel.
-            // - This requires no math, but it is hard to drive forward slowly and keep straight.
-            // leftPower  = -gamepad1.left_stick_y ;
-            // rightPower = -gamepad1.right_stick_y ;
+                //move the lift and in the process lower the robot to the ground
+                case 10:
 
-            // Send calculated power to wheels
-            leftDrive.setPower(leftPower);
-            rightDrive.setPower(rightPower);
+                    lift.setPower(.5);
+                    if(((lift.getCurrentPosition() - originalLiftPosition) / 1013) >= 6.5){
+                        lift.setPower(0);
+                        part = 20;
+                    }
+                    break;
 
-            // Show the elapsed game time and wheel power.
+                //setup the drive from lander to depot
+
+                case 20:
+                    startRuntime = runtime.seconds();
+                    part = 21;
+                    break;
+
+                case 21:
+                    rightDrive.setPower(0.5);
+                    if(runtime.seconds() - startRuntime >= 1.5){
+                        rightDrive.setPower(0);
+                        part = 22;
+                    }
+                    break;
+
+                case 22:
+
+                    pathfinderDrive = new PathfinderDrive(telemetry, hardwareMap.appContext, leftDrive, rightDrive, R.raw.lefttrajectorystep1traj2, R.raw.righttrajectorystep1traj2);
+                    pathfinderDrive.setup(false);
+                    part = 30;
+                    break;
+
+                case 30:
+
+                    leftDrive.setPower(pathfinderDrive.leftEncoderFollower.calculate(leftDrive.getCurrentPosition()));
+                    rightDrive.setPower(pathfinderDrive.rightEncoderFollower.calculate(rightDrive.getCurrentPosition()));
+                    if(pathfinderDrive.leftEncoderFollower.isFinished()){
+                        leftDrive.setPower(0);
+                        rightDrive.setPower(0);
+                        part = 40;
+                    }
+                    break;
+
+                //set the team marker down
+                case 40:
+
+                    deployer.setPosition(0);
+                    startRuntime = runtime.seconds();
+                    part = 50;
+                    break;
+
+                //wait for a time, allowing the marker to fall off
+                case 50:
+
+                    if(runtime.seconds() - startRuntime >= 2){
+                        deployer.setPosition(1);
+                        part = 60;
+                    }
+                    break;
+
+                case 60:
+
+                    break;
+
+            }
+
+
+
+            // Show the elapsed game time
             telemetry.addData("Status", "Run Time: " + runtime.toString());
-            telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
             telemetry.update();
         }
     }

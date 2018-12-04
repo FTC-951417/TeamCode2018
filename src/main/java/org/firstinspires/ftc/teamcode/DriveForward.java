@@ -24,7 +24,8 @@
  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ *POSSIBILITY OF SUCH DAMAGE.
  */
 
 package org.firstinspires.ftc.teamcode;
@@ -69,6 +70,7 @@ public class DriveForward extends LinearOpMode {
     private DcMotor roller = null;
 
     private Servo pusher = null;
+    private  Servo deployer = null;
 
     private int orgCounts = 0;
 
@@ -91,6 +93,7 @@ public class DriveForward extends LinearOpMode {
         rightFDrive.setDirection(DcMotor.Direction.FORWARD);
 
         lift = hardwareMap.get(DcMotor.class, "lift");
+        lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         joint1 = hardwareMap.get(DcMotor.class, "joint_1");
         joint1.setDirection(DcMotor.Direction.REVERSE);
@@ -98,7 +101,10 @@ public class DriveForward extends LinearOpMode {
         roller = hardwareMap.get (DcMotor.class, "roller");
         pusher = hardwareMap.get (Servo.class, "pusher");
         pusher.setDirection(Servo.Direction.FORWARD);
-        pusher.setPosition(0.2);
+        pusher.setPosition(1);
+        deployer = hardwareMap.get(Servo.class, "deployer");
+        deployer.setDirection(Direction.FORWARD);
+        deployer.setPosition(1);
 
         orgCounts = leftDrive.getCurrentPosition();
 
@@ -145,7 +151,7 @@ public class DriveForward extends LinearOpMode {
                 //if left trigger is pressed enough
             } else if (liftDown > 0.5) {
 
-                lift.setPower(-.4);
+                lift.setPower(-.8);
 
             } else {
 
@@ -202,12 +208,14 @@ public class DriveForward extends LinearOpMode {
             if(gamepad2.b) {
                 // move to 0 degrees.
                 pusher.setPosition(0);
-            } else if (gamepad2.a) {
-                // move to 90 degrees.
-                pusher.setPosition(0.5);
-            } else if (gamepad2.y) {
-                // move to 180 degrees.
+            }else{
                 pusher.setPosition(1);
+            }
+
+            if(gamepad2.y){
+                deployer.setPosition(0);
+            }else{
+                deployer.setPosition(1);
             }
 
                 // Show the elapsed game time and wheel power.
@@ -215,6 +223,7 @@ public class DriveForward extends LinearOpMode {
                 telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
                 telemetry.addData("pusher Position", pusher.getPosition());
                 telemetry.addData("Velocity", (((leftDrive.getCurrentPosition() - orgCounts) / 2240) * 3.91304 * Math.PI) / runtime.seconds());
+                telemetry.addData("Lift", lift.getCurrentPosition());
                 telemetry.update();
             }
         }
