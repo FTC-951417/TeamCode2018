@@ -99,6 +99,7 @@ public class DriveForward extends LinearOpMode {
         joint1.setDirection(DcMotor.Direction.REVERSE);
         joint2 = hardwareMap.get (DcMotor.class, "joint_2");
         roller = hardwareMap.get (DcMotor.class, "roller");
+        roller.setDirection(DcMotor.Direction.FORWARD);
         pusher = hardwareMap.get (Servo.class, "pusher");
         pusher.setDirection(Servo.Direction.FORWARD);
         pusher.setPosition(1);
@@ -190,12 +191,12 @@ public class DriveForward extends LinearOpMode {
             //if right trigger is pressed down enough. dominates over roll out
             if (rollerIn > 0.5) {
 
-                roller.setPower(0.4);
+                roller.setPower(0.6);
 
                 //if left trigger is pressed enough
             } else if (rollerOut > 0.5) {
 
-                roller.setPower(-.4);
+                roller.setPower(-1.0);
 
             } else {
 
