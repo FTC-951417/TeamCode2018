@@ -75,7 +75,7 @@ public class DriveForward extends LinearOpMode {
     private int orgCounts = 0;
 
     @Override
-     public void runOpMode() {
+    public void runOpMode() {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
@@ -164,7 +164,7 @@ public class DriveForward extends LinearOpMode {
             if (joint1Power > .75 || joint1Power < -.75) {
 
                 //the constant number sets the max power
-                 joint1.setPower(joint1Power * 0.3);
+                joint1.setPower(joint1Power * 0.3);
 
             } else {
 
@@ -174,7 +174,7 @@ public class DriveForward extends LinearOpMode {
 
             //control joint2
             double joint2Power = -gamepad2.right_stick_y * .95;
-            if (joint2Power > 0.8 || joint2Power < -0.8) {
+            if (joint2Power > 1.0 || joint2Power < -1.0) {
 
                 //the constant number sets the max power
                 joint2.setPower(joint2Power);
@@ -219,13 +219,13 @@ public class DriveForward extends LinearOpMode {
                 deployer.setPosition(1);
             }
 
-                // Show the elapsed game time and wheel power.
-                telemetry.addData("Status", "Run Time: " + runtime.toString());
-                telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
-                telemetry.addData("pusher Position", pusher.getPosition());
-                telemetry.addData("Velocity", (((leftDrive.getCurrentPosition() - orgCounts) / 2240) * 3.91304 * Math.PI) / runtime.seconds());
-                telemetry.addData("Lift", lift.getCurrentPosition());
-                telemetry.update();
-            }
+            // Show the elapsed game time and wheel power.
+            telemetry.addData("Status", "Run Time: " + runtime.toString());
+            telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
+            telemetry.addData("pusher Position", pusher.getPosition());
+            telemetry.addData("Velocity", (((leftDrive.getCurrentPosition() - orgCounts) / 2240) * 3.91304 * Math.PI) / runtime.seconds());
+            telemetry.addData("Lift", lift.getCurrentPosition());
+            telemetry.update();
         }
-     }
+    }
+}
